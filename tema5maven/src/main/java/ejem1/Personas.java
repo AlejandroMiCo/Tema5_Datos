@@ -14,7 +14,6 @@ import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.QueryParam;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
-import jakarta.xml.bind.annotation.XmlElement;
 
 @Path("/personas")
 public class Personas {
@@ -72,14 +71,14 @@ public class Personas {
         return Response.ok(persna).build();
     }
 
-    @POST
-    @Consumes(MediaType.APPLICATION_JSON)
-    public Response guardarPersona(Persona[] personasToAdd) {
-        for (Persona persona : personasToAdd) {
-            personas.add(persona);
-        }
-        return Response.ok(personas).build();
-    }
+    // @POST
+    // @Consumes(MediaType.APPLICATION_JSON)
+    // public Response guardarPersona(Persona[] personasToAdd) {
+    //     for (Persona persona : personasToAdd) {
+    //         personas.add(persona);
+    //     }
+    //     return Response.ok(personas).build();
+    // }
 
     @DELETE
     @Consumes(MediaType.APPLICATION_JSON)

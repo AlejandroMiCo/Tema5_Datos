@@ -1,6 +1,5 @@
 package ejem1;
 
-import jakarta.xml.bind.annotation.XmlAnyAttribute;
 import jakarta.xml.bind.annotation.XmlRootElement;
 
 // import javax.xml.bind.annotation.XmlRootElement;
