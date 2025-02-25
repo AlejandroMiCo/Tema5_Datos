@@ -3,9 +3,9 @@ package ejem1;
 public class Deportista {
     private int Id;
     private String nombre;
-    private String deporte;
     private boolean activo;
     private String genero;
+    private String deporte;
 
     public int getId() {
         return Id;
@@ -55,8 +55,8 @@ public class Deportista {
         super();
         this.Id = id;
         this.nombre = nombre;
-        this.deporte = deporte;
         this.activo = activo;
         this.genero = genero;
+        this.deporte = deporte;
     }
 }

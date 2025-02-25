@@ -1,6 +1,8 @@
 package ejem1;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -69,7 +71,7 @@ public class Deportistas {
         return null;
     }
 
-    @Path("7deporte/{nombreDeporte}")
+    @Path("/deporte/{nombreDeporte}")
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public ArrayList<Deportista> buscarJugadoresPorDeporte(@PathParam("nombreDeporte") String nombreDeporte) {
@@ -168,7 +170,7 @@ public class Deportistas {
         abrirConexion("ad_tema6", "localhost", "root", "");
         ArrayList<Deportista> deportistas = new ArrayList<>();
         try {
-            String sql = "SELECT * FROM deportistas where genero = 'femeninos'";
+            String sql = "SELECT * FROM deportistas where genero = 'femenino'";
             System.out.println(sql);
             mySQLConexion.createStatement().execute(sql);
             ResultSet resultados = mySQLConexion.createStatement().executeQuery(sql);
@@ -255,15 +257,14 @@ public class Deportistas {
         abrirConexion("ad_tema6", "localhost", "root", "");
         try {
             String sql = "INSERT INTO deportistas VALUES (" + deportista.getId() + ",'" + deportista.getNombre() + "', "
-                    + deportista.getDeporte() + ",'" + deportista.isActivo() + "','" + deportista.getGenero() + "')";
+                    + deportista.isActivo() + ",'" + deportista.getGenero() + "','" + deportista.getDeporte() + "')";
             System.out.println(sql);
 
             mySQLConexion.createStatement().execute(sql);
         } catch (SQLException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
-        return Response.ok(deportista).build();
+        return Response.status(200).build();
     }
 
     @POST
@@ -278,9 +279,8 @@ public class Deportistas {
         this.abrirConexion("ad_tema6", "localhost", "root", "");
 
         try {
-            String sql = "INSERT INTO deportistas VALUES (" + deportista.getId() + ",'" + deportista.getNombre()
-                    + "', " + deportista.getDeporte() + ",'" + deportista.isActivo() + "','"
-                    + deportista.getGenero() + "')";
+            String sql = "INSERT INTO deportistas VALUES (" + deportista.getId() + ",'" + deportista.getNombre() + "', "
+                    + deportista.isActivo() + ",'" + deportista.getGenero() + "','" + deportista.getDeporte() + "')";
             System.out.println(sql);
 
             mySQLConexion.createStatement().execute(sql);
@@ -319,19 +319,22 @@ public class Deportistas {
         this.abrirConexion("ad_tema6", "localhost", "root", "");
 
         try {
-            String sql = "update deportistas set nombre='" + deportista.getNombre() + "',deporte= "
-                    + deportista.getDeporte() + ",activo='" + deportista.isActivo() + "',genero='"
-                    + deportista.getGenero() + "' where id=" + deportista.getId();
+            String sql = "Update deportistas set nombre='" + deportista.getNombre() + "',activo="
+                    + deportista.isActivo() + ",genero='"
+                    + deportista.getGenero() + "',deporte= '"
+                    + deportista.getDeporte() + "' where id=" + deportista.getId();
             mySQLConexion.createStatement().execute(sql);
         } catch (SQLException e) {
             System.out.println("Se ha producido un error: " + e.getLocalizedMessage());
         }
-        return Response.ok(deportista).build();
+        return Response.status(200).build();
     }
 
     @DELETE
-    @Path("del/id")
+    @Path("/del/{id}")
     public Response eliminarDeportista(@QueryParam("id") int id) {
+        this.abrirConexion("ad_tema6", "localhost", "root", "");
+
         try {
             String sql = "delete from deportistas where id =" + id;
             mySQLConexion.createStatement().execute(sql);
@@ -344,22 +347,28 @@ public class Deportistas {
     @GET
     @Path("/img/{id}/{num}")
     @Produces({ "image/jpg" })
-    public Response ej18(@PathParam("id") int id, @PathParam("num") int num) {  //Ajustar en caso de que no devuelva la imagen de forma correcta
+    public Response getImagen(@PathParam("id") String id, @PathParam("num") String num) { // Ajustar en caso de que no
+        this.abrirConexion("ad_tema6", "localhost", "root", "");
+        // devuelva la imagen de forma
+        // correcta
         ArrayList<String> listaImagenes = new ArrayList<>();
         String sql = "Select * from imagenes";
         try {
             ResultSet result = mySQLConexion.createStatement().executeQuery(sql);
             while (result.next()) {
-                System.out.println(result.getString("nombre"));
                 listaImagenes.add(result.getString("nombre"));
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        // Imprimir los archivos (opcional)
         for (String imagen : listaImagenes) {
             if (imagen.split("_")[0].equals(id) && imagen.split("_")[1].equals(num)) {
-                return Response.ok(new File("/imagenes/" + imagen)).build();
+                try {
+                    return Response.ok((new FileInputStream(new File("C:/Users/Alejandro/Desktop/Tema5_Datos/tema5maven/src/main/java/ejem1/imagenes/" + imagen)))).build();
+                } catch (FileNotFoundException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
             }
         }
         return null;

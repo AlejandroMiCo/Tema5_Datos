@@ -23,7 +23,7 @@ public class Coche {
     @Consumes(MediaType.APPLICATION_XML)
     @Produces(MediaType.APPLICATION_JSON)
     public Response getCar(Car coche) {
-        this.coches.add(coche); // Se añade el coche a la lista
+        coches.add(coche); // Se añade el coche a la lista
         return Response.ok(coche).build(); // Se devuelve el coche
     }
 
@@ -33,7 +33,7 @@ public class Coche {
         Car c = new Car(); // Se crea un coche y se inicializan sus param.
         c.setMarca("Ford");
         c.setModelo("Focus");
-        this.coches.add(c); // Se añade el coche a la lista
-        return this.coches;
+        coches.add(c); // Se añade el coche a la lista
+        return coches;
     }
 }
